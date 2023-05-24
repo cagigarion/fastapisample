@@ -5,15 +5,43 @@ networks:
 
 services:
 
-  mysql:
-    container_name: mysql
-    image: debezium/example-mysql:0.9
-    ports:
-      - "3306:3306"
-    networks:
-      - fake-network
-    environment:
-      MYSQL_ROOT_PASSWORD: debezium
-      MYSQL_USER: mysqluser
-      MYSQL_PASSWORD: mysqlpw
- 
+  # mysql:
+  #   container_name: mysql
+  #   image: debezium/example-mysql:0.9
+  #   ports:
+  #     - "3306:3306"
+  #   networks:
+  #     - fake-network
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: debezium
+  #     MYSQL_USER: mysqluser
+  #     MYSQL_PASSWORD: mysqlpw
+  
+
+  services:
+    mysql_db:
+      image: mysql:8.0
+      container_name: dev_mysql
+      ports:
+        # <Port exposed> : < MySQL Port running inside container>
+        - "3306:3306"
+      # volumes:
+      #   - ./data/db:/var/lib/mysql
+      environment:
+        MYSQL_DATABASE: databiz_demo
+        MYSQL_USER: user
+        MYSQL_PASSWORD: password
+        MYSQL_ROOT_PASSWORD: root
+
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: dev_phpmyadmin
+      restart: always
+      depends_on:
+        - mysql_db
+      ports:
+        - 9090:80
+      environment:
+        PMA_HOST: mysql_db
+        PMA_PORT: 3306
+        MYSQL_ROOT_PASSWORD: root
