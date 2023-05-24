@@ -1,0 +1,19 @@
+# rename network name
+networks:
+  fake-network:
+    driver: bridge
+
+services:
+
+  mysql:
+    container_name: mysql
+    image: debezium/example-mysql:0.9
+    ports:
+      - "3306:3306"
+    networks:
+      - fake-network
+    environment:
+      MYSQL_ROOT_PASSWORD: debezium
+      MYSQL_USER: mysqluser
+      MYSQL_PASSWORD: mysqlpw
+ 
